@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 PixelOS
+# SPDX-FileCopyrightText: 2026 Shinkai Project
 # SPDX-License-Identifier: Apache-2.0
 
 from __future__ import annotations
@@ -34,7 +34,7 @@ class PixelOsFeedTest(unittest.TestCase):
             ),
         }
         metadata.update(metadata_overrides or {})
-        artifact = self.directory / "PixelOS_device-17.0-20260619-0000.zip"
+        artifact = self.directory / "Shinkai Project_device-17.0-20260619-0000.zip"
         rendered = "\n".join(f"{key}={value}" for key, value in metadata.items()) + "\n"
         with zipfile.ZipFile(artifact, "w") as archive:
             archive.writestr(pixelos_feed.OTA_METADATA_PATH, rendered)

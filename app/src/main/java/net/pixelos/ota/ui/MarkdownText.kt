@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2026 PixelOS
+ * SPDX-FileCopyrightText: 2026 Shinkai Project
  * SPDX-License-Identifier: Apache-2.0
  */
 

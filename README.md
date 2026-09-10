@@ -1,16 +1,16 @@
 <!--
 SPDX-FileCopyrightText: The LineageOS Project
-SPDX-FileCopyrightText: 2026 PixelOS
+SPDX-FileCopyrightText: 2026 Shinkai Project
 SPDX-License-Identifier: Apache-2.0
 -->
 
-# PixelOS Updater
+# Shinkai Project Updater
 
-PixelOS Updater downloads, verifies, and installs full OTA packages. The codebase retains its
+Shinkai Project Updater downloads, verifies, and installs full OTA packages. The codebase retains its
 LineageOS ancestry, but its package identity, product properties, server contract, storage,
-branding, and optional PixelOS services are defined for PixelOS.
+branding, and optional Shinkai Project services are defined for Shinkai Project.
 
-## PixelOS integration contract
+## Shinkai Project integration contract
 
 The application is a platform-signed privileged `system_ext` app with package name
 `net.pixelos.ota`. Add the `Updater` module to the product packages. Its Soong definition pulls in
@@ -24,9 +24,9 @@ the following required modules automatically:
 The privileged permissions that require allowlisting are declared in `app/net.pixelos.ota.xml`.
 Keep that allowlist installed with the app. Package-install permissions remain in the manifest and
 are granted through the platform signature. Downloaded packages live in `/data/system_updates`;
-exported packages use the public `PixelOS updates/` directory.
+exported packages use the public `Shinkai Project updates/` directory.
 
-The surrounding PixelOS sepolicy must retain this file-context mapping (currently provided by
+The surrounding Shinkai Project sepolicy must retain this file-context mapping (currently provided by
 `device/custom/sepolicy/private/file_contexts`):
 
 ```text
@@ -34,7 +34,7 @@ The surrounding PixelOS sepolicy must retain this file-context mapping (currentl
 ```
 
 It must also retain the `seapp_contexts` rule that assigns platform-signed `net.pixelos.ota` to
-the `updater_app` domain. PixelOS inherits that domain's update_engine, OTA-file, custom-property,
+the `updater_app` domain. Shinkai Project inherits that domain's update_engine, OTA-file, custom-property,
 and recovery-property rules from `device/lineage/sepolicy/common/private/updater_app.te`. Without
 the package-specific domain mapping, the Java permission declarations alone are not sufficient.
 
@@ -42,13 +42,13 @@ The build must provide these properties:
 
 | Property | Meaning | Used for |
 | --- | --- | --- |
-| `ro.custom.device` | PixelOS device codename | OTA and changelog filenames |
-| `ro.custom.version` | Installed PixelOS version | Displayed build version |
+| `ro.custom.device` | Shinkai Project device codename | OTA and changelog filenames |
+| `ro.custom.version` | Installed Shinkai Project version | Displayed build version |
 | `net.pixelos.version` | Official-devices branch | OTA and changelog URLs |
 | `ro.build.date.utc` | Installed build timestamp | Rejecting current and older OTAs |
 | `ro.build.ab_update` | A/B capability | Streaming and performance-mode availability |
 
-All three PixelOS-specific properties must be non-empty in production. Missing device or branch
+All three Shinkai Project-specific properties must be non-empty in production. Missing device or branch
 properties make an update check fail closed instead of querying an ambiguous feed.
 Downgrades are always rejected. A resource overlay can disallow cross-SDK upgrades.
 
@@ -62,7 +62,7 @@ Product overlays may change the following booleans in `app/src/main/res/values/c
 
 The default automatic check interval is two weeks. On first launch, the app migrates the legacy
 SharedPreferences values for performance mode, automatic deletion, periodic checks, and streaming
-into DataStore. Room migrations accept both the old PixelOS version-1 table (without `type`) and
+into DataStore. Room migrations accept both the old Shinkai Project version-1 table (without `type`) and
 the Lineage-derived version-1 table, preserving existing update rows through schema version 4.
 
 ## OTA service
@@ -70,7 +70,7 @@ the Lineage-derived version-1 table, preserving existing update rows through sch
 For branch `{branch}` and device `{device}`, Updater fetches:
 
 ```text
-https://raw.githubusercontent.com/PixelOS-AOSP/official_devices/{branch}/API/updater/{device}.json
+https://raw.githubusercontent.com/Shinkai Project-AOSP/official_devices/{branch}/API/updater/{device}.json
 ```
 
 `API/updater/{device}.json` uses the strict schema below. The legacy `response` wrapper and its
@@ -85,13 +85,13 @@ The response is a non-empty JSON array. Each update has exactly one file:
     "datetime": 1781858358,
     "files": [
       {
-        "filename": "PixelOS_device-17.0-20260619-0000.zip",
+        "filename": "Shinkai Project_device-17.0-20260619-0000.zip",
         "os_patch_level": "2026-06-01",
         "os_sdk_level": 36,
         "ota_property_files": "payload_metadata.bin:4662:187245,payload.bin:191907:1926080000,payload_properties.txt:1926271907:156",
         "sha256": "11468fc263696b8bc0afd35861c35d62a562ba29722447a3972c39f0023deb7f",
         "size": 1926282058,
-        "url": "https://downloads.example.org/device/PixelOS_device-17.0-20260619-0000.zip"
+        "url": "https://downloads.example.org/device/Shinkai Project_device-17.0-20260619-0000.zip"
       }
     ],
     "type": "ci",
@@ -116,7 +116,7 @@ The runtime contract is:
 - `size`: positive artifact size in bytes.
 - `url`: absolute HTTPS artifact URL.
 - `type`: retained as `ci` for feed compatibility; it is not used to filter updates.
-- `version`: non-blank PixelOS release version.
+- `version`: non-blank Shinkai Project release version.
 - `additional_images`: optional website metadata ignored by the updater app.
 
 The response body is capped at 1 MiB, redirects are disabled, and a non-successful HTTP response,
@@ -132,13 +132,13 @@ are removed while locally imported packages are preserved.
 the OTA ZIP and computes size and SHA-256 itself:
 
 ```sh
-tools/pixelos_feed.py generate-ota PixelOS_device-17.0-build.zip \
-  --url https://downloads.example.org/device/PixelOS_device-17.0-build.zip \
+tools/pixelos_feed.py generate-ota Shinkai Project_device-17.0-build.zip \
+  --url https://downloads.example.org/device/Shinkai Project_device-17.0-build.zip \
   --version 17.0 \
   --output device.json
 
 tools/pixelos_feed.py validate-ota device.json \
-  --artifact PixelOS_device-17.0-build.zip
+  --artifact Shinkai Project_device-17.0-build.zip
 ```
 
 Run the validator in official-devices CI before publishing each JSON file. Artifact comparison
@@ -149,7 +149,7 @@ checks filename, timestamp, patch level, SDK level, `ota_property_files`, size, 
 The main screen loads Markdown from:
 
 ```text
-https://raw.githubusercontent.com/PixelOS-AOSP/official_devices/{branch}/API/updater/changelogs/{device}.md
+https://raw.githubusercontent.com/Shinkai Project-AOSP/official_devices/{branch}/API/updater/changelogs/{device}.md
 ```
 
 The app shows explicit loading, empty, failure, and loaded states. Responses must be successful,
@@ -161,10 +161,10 @@ the menu action opens the same current-device document in a browser.
 `push-update.sh` registers a local full OTA on a rooted development device:
 
 ```sh
-./push-update.sh PixelOS_device-17.0-build.zip [UNVERIFIED] [SERIAL]
+./push-update.sh Shinkai Project_device-17.0-build.zip [UNVERIFIED] [SERIAL]
 ```
 
-The script accepts only `PixelOS_DEVICE-VERSION-*.zip`, verifies the connected
+The script accepts only `Shinkai Project_DEVICE-VERSION-*.zip`, verifies the connected
 `ro.custom.device`, validates OTA metadata through `tools/pixelos_feed.py`, computes SHA-256, checks
 for Room schema version 4 and duplicate IDs, fills the current database columns, and writes the
 package to `/data/system_updates`. Launch Updater once first so Room creates or migrates the

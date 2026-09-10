@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # SPDX-FileCopyrightText: The LineageOS Project
-# SPDX-FileCopyrightText: 2026 PixelOS
+# SPDX-FileCopyrightText: 2026 Shinkai Project
 # SPDX-License-Identifier: Apache-2.0
 
 set -u
@@ -14,9 +14,9 @@ root_enabled=0
 
 usage() {
     echo "Usage: $0 ZIP [UNVERIFIED] [SERIAL]"
-    echo "Push a PixelOS OTA ZIP to $updates_dir and register it with Updater."
+    echo "Push a Shinkai Project OTA ZIP to $updates_dir and register it with Updater."
     echo
-    echo "Expected filename: PixelOS_DEVICE-VERSION-*.zip"
+    echo "Expected filename: Shinkai Project_DEVICE-VERSION-*.zip"
     echo "Set UNVERIFIED to any non-empty value to make Updater verify the package."
 }
 
@@ -101,15 +101,15 @@ zip_path=$(cd "$zip_directory" 2>/dev/null && pwd -P)/$zip_name
 serial=${3-}
 
 case "$zip_name" in
-    PixelOS_*-*-*.zip) ;;
-    *) die "Filename must match PixelOS_DEVICE-VERSION-*.zip" ;;
+    Shinkai Project_*-*-*.zip) ;;
+    *) die "Filename must match Shinkai Project_DEVICE-VERSION-*.zip" ;;
 esac
 
 case "$zip_name" in
     *[!A-Za-z0-9._-]*) die "Filename contains unsupported characters" ;;
 esac
 
-name_remainder=${zip_name#PixelOS_}
+name_remainder=${zip_name#Shinkai Project_}
 ota_device=${name_remainder%%-*}
 name_remainder=${name_remainder#*-}
 version=${name_remainder%%-*}
@@ -225,4 +225,4 @@ sql="INSERT INTO updates (download_id, status, path, timestamp, type, version, s
 adb_cmd shell "sqlite3 '$database_path' \"$sql\"" || \
     die "Failed to add OTA ZIP to the Updater database; pushed file remains at $zip_path_device"
 
-echo "Registered $zip_name with PixelOS Updater."
+echo "Registered $zip_name with Shinkai Project Updater."

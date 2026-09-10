@@ -27,7 +27,7 @@ abstract class UpdatesDatabase : RoomDatabase() {
 
         private val MIGRATION_1_2 = object : Migration(1, 2) {
             override fun migrate(db: SupportSQLiteDatabase) {
-                // PixelOS's legacy version-1 database predates Lineage's `type` column.
+                // Shinkai Project's legacy version-1 database predates Lineage's `type` column.
                 // Inspect the source table so both layouts can upgrade in place.
                 val typeExpression = if (db.hasColumn("updates", "type")) {
                     "`type`"

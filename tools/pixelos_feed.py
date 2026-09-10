@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-# SPDX-FileCopyrightText: 2026 PixelOS
+# SPDX-FileCopyrightText: 2026 Shinkai Project
 # SPDX-License-Identifier: Apache-2.0
 
-"""Generate and validate PixelOS Updater metadata."""
+"""Generate and validate Shinkai Project Updater metadata."""
 
 from __future__ import annotations
 
